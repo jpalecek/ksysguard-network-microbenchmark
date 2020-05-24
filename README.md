@@ -14,3 +14,5 @@ When run, the program will print sums of the parsed data on the first line. They
 in the original implementation that I haven't corrected which stems from wrong usage of regexes.
 
 The second line shows the time of one call, in seconds.
+
+You can change the [regex-test.data](regex-test.data) file to test the implementations on different data. It should be made just by copying the content of `/proc/net/tcp`.
