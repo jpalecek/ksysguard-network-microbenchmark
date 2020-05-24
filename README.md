@@ -5,7 +5,7 @@ Compile with `cmake`, `make` and run `regex-test`.
 
 There are 3 implementations of parsing `/proc/net/tcp{,6}`. In this order:
 
-||Original|D29808 proposed|Boost.Sphinx|
+||Original|D29808 proposed|Boost.Spirit|
 |---|---|---|---|
 |Correctness:|Some bugs were found<ul><li>one condition was flipped</li><li>still gives wrong results, probably because the regex is wrong</li></ul>|One of the magic numbers was wrong. Now correct|Correct|
 |Performance:|worst|best|ok|
