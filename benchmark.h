@@ -104,7 +104,6 @@ std::tuple<map_to<Fs, float>...> tournament(Timer tmr, Fs &&... fs)
 	float s2 [ sizeof...(fs) ] { 0 };
 	float n [ sizeof...(fs) ] { 0 };
 
-	std::ofstream o("benchmark-data.out");
 	auto avg = [&](int i) {
 							 return s[i]/n[i];
 						 };
@@ -116,7 +115,6 @@ std::tuple<map_to<Fs, float>...> tournament(Timer tmr, Fs &&... fs)
 										 typename Timer::time_t t0 = tmr.sample();
 										 t_funcs[i]();
 										 float elapsed = tmr.difference(t0, tmr.sample());
-										 o << i << "," << elapsed << "\n";
 										 s[i] += elapsed;
 										 s2[i] += elapsed*elapsed;
 										 n[i]++;
