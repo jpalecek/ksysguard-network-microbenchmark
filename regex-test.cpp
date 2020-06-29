@@ -196,6 +196,36 @@ uint32_t parse_3()
   return ret;
 }
 
+uint32_t parse_4()
+{
+  int ret = 0;
+  ifstream file("regex-test.data");
+
+  std::string data;
+  while (std::getline(file, data)) {
+    char address_data[33];
+    int port, inode;
+    if (sscanf(data.c_str(), " %*d: %32[0-9A-F]:%x %*32[0-9A-F]:%*x %*x %*x:%*x %*x:%*x %*x %*x %*x %d", address_data, &port, &inode) == 3) {
+      if (strnlen(address_data, 32) == 8) {
+        uint32_t ipv4addr = strtoul(address_data, nullptr, 16);
+        ret += ipv4addr;
+      } else {
+        uint32_t ipv6addr[4];
+        for (int i=3; i>= 0; i--) {
+          address_data[i*8 + 8] = 0;
+          ipv6addr[i] = strtoul(address_data+i*8, nullptr, 16);
+        }
+        if (ipv6addr[0] == 0 && ipv6addr[1] == 0 && ipv6addr[2] == 0xffff0000)
+          ret += ipv6addr[3];
+        else
+          ret += ipv6addr[0] + ipv6addr[1] + ipv6addr[2] + ipv6addr[3];
+      }
+      ret += port + inode;
+    }
+  }
+  return ret;
+}
+
 template <class T> struct tuple_seq;
 template <class ... Ts> struct tuple_seq<tuple<Ts...> > { using type = typename seq<Ts...>::type; };
 template <class F, class Tuple, class ... Is>
@@ -206,8 +236,8 @@ void do_something_with_tuple(const Tuple& t, F f, type_list<Is...>* s_)
 
 int main()
 {
-  std::cout << parse_1() << " " << parse_2() << " " << parse_3() << "\n";
-  auto results = tournament(gettimeofday_timer(), parse_1, parse_2, parse_3);
+  std::cout << parse_1() << " " << parse_2() << " " << parse_3()  << " " << parse_4() << "\n";
+  auto results = tournament(gettimeofday_timer(), parse_1, parse_2, parse_3, parse_4);
   do_something_with_tuple(results, [] (float f) {
                                      std::cout << f << " ";
                                    }, (typename tuple_seq<typeof(results)>::type*)0);
